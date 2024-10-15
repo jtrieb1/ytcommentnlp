@@ -1,0 +1,7 @@
+__pycache__
+nlp-backend/__pycache__
+nlp-backend/.vscode
+nlp-backend/venv
+nlp-frontend/node_modules
+nlp-frontend/public
+nlp-frontend/.gitignore
