@@ -11,7 +11,7 @@ ytcommentnlp is a web application that scrapes YouTube comments from a given vid
 ## Technologies Used
 
 - **Frontend**: React with Vite
-- **Backend**: Flask
+- **Backend**: Flask with NLTK
 
 ## Installation
 

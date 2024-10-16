@@ -4,6 +4,8 @@ from youtube_comment_downloader import *
 from itertools import islice
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from nltk import tokenize
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
 import pandas as pd
 from datetime import datetime, timedelta
 
@@ -37,15 +39,24 @@ def scrape():
     sid = SentimentIntensityAnalyzer()
     dfdict = []
     for comment in islice(comments, request.json['ytCount']):
-        sentences = tokenize.sent_tokenize(comment["text"])
+
         scores = {
             "compound": 0,
             "positive": 0,
             "negative": 0,
             "neutral": 0
         }
+
+        sentences = tokenize.sent_tokenize(comment["text"])
         for sentence in sentences:
-            ss = sid.polarity_scores(sentence)
+            tokens = tokenize.word_tokenize(sentence)
+            tokens = [t.lower() for t in tokens]
+            filtered_tokens = [t for t in tokens if t not in stopwords.words('english')]
+            lemmatizer = WordNetLemmatizer()
+            lemmatized_tokens = [lemmatizer.lemmatize(t) for t in filtered_tokens]
+            processed = " ".join(lemmatized_tokens)
+        
+            ss = sid.polarity_scores(processed)
             scores["compound"] += ss["compound"]
             scores["positive"] += ss["pos"]
             scores["negative"] += ss["neg"]
