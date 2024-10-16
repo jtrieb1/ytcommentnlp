@@ -8,6 +8,7 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 import pandas as pd
 from datetime import datetime, timedelta
+import emot
 
 app = Flask(__name__)
 CORS(app)
@@ -23,6 +24,19 @@ def parseTime(time, time_parsed):
         return dt - timedelta(days=int(time.split(" ")[0]))
     else:
         return dt
+
+def cleanEmoji(text):
+    def cleanSymbols(text):
+        return text.replace('_', ' ').replace('-', ' ').replace(':', ' ')
+    
+    for emoti in emot.emo_unicode.EMOJI_UNICODE:
+        text = text.replace(emoti, cleanSymbols(emot.emo_unicode.EMOJI_UNICODE.get(emoti, '')))
+    for emoti in emot.emo_unicode.UNICODE_EMOJI:
+        text = text.replace(emoti, cleanSymbols(emot.emo_unicode.UNICODE_EMOJI.get(emoti, '')))
+    for emoti in emot.emo_unicode.EMOTICONS_EMO:
+        text = text.replace(emoti, cleanSymbols(emot.emo_unicode.EMOTICONS_EMO.get(emoti, '')))
+    
+    return text
 
 @app.post('/scrape')
 def scrape():
@@ -49,6 +63,9 @@ def scrape():
 
         sentences = tokenize.sent_tokenize(comment["text"])
         for sentence in sentences:
+            # Clean emoji for better parsing
+            sentence = cleanEmoji(sentence)
+
             tokens = tokenize.word_tokenize(sentence)
             tokens = [t.lower() for t in tokens]
             filtered_tokens = [t for t in tokens if t not in stopwords.words('english')]
