@@ -10,10 +10,10 @@ const ResultViewer = ({ results }: { results: ScrapeResult[] }) => {
 
     const downloadResultsAsCsv = () => {
         const csv = refinedResults.map(result => {
-            return `"${result.user}","${result.comment}",${result.posted},${result.compound_sentiment},${result.positive_sentiment},${result.negative_sentiment},${result.neutral_sentiment}`
+            return `"${result.user}","${result.comment}",${result.posted},${result.compound_sentiment},${result.positive_sentiment},${result.negative_sentiment},${result.neutral_sentiment},${result.unsplit_compound_sentiment},${result.unsplit_positive_sentiment},${result.unsplit_negative_sentiment},${result.unsplit_neutral_sentiment}`
         }).join('\n');
         // Add headers
-        const headers = 'User,Comment,Time Posted,Predicted Compound Sentiment,Predicted Positive Sentiment,Predicted Negative Sentiment,Predicted Neutral Sentiment\n';
+        const headers = 'User,Comment,Time Posted,Predicted Compound Sentiment,Predicted Positive Sentiment,Predicted Negative Sentiment,Predicted Neutral Sentiment, Unsplit Predicted Compound Sentiment, Unsplit Predicted Positive Sentiment, Unsplit Predicted Negative Sentiment, Unsplit Predicted Neutral Sentiment\n';
         const csvWithHeaders = headers + csv;
         const blob = new Blob([csvWithHeaders], { type: 'text/csv' });
         const url = URL.createObjectURL(blob);
@@ -118,6 +118,10 @@ const ResultViewer = ({ results }: { results: ScrapeResult[] }) => {
             <p>Predicted Positive Sentiment: {result.positive_sentiment}</p>
             <p>Predicted Negative Sentiment: {result.negative_sentiment}</p>
             <p>Predicted Neutral Sentiment: {result.neutral_sentiment}</p>
+            <p>Unsplit Predicted Compound Sentiment: {result.unsplit_compound_sentiment}</p>
+            <p>Unsplit Predicted Positive Sentiment: {result.unsplit_positive_sentiment}</p>
+            <p>Unsplit Predicted Negative Sentiment: {result.unsplit_negative_sentiment}</p>
+            <p>Unsplit Predicted Neutral Sentiment: {result.unsplit_neutral_sentiment}</p>
             </div>
         ))}
         </div>

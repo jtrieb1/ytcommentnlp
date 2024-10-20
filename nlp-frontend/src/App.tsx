@@ -10,6 +10,10 @@ export type ScrapeResult = {
   positive_sentiment: number,
   negative_sentiment: number,
   neutral_sentiment: number,
+  unsplit_compound_sentiment: number,
+  unsplit_positive_sentiment: number,
+  unsplit_negative_sentiment: number,
+  unsplit_neutral_sentiment: number
 }
 
 function App() {
